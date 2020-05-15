@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head>
+    <title>EJ2 Grid</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Typescript Grid Control">
+    <meta name="author" content="Syncfusion">
+    <link href="index.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-grids/styles/material.css" rel="stylesheet">
+
+        <link href="//cdn.syncfusion.com/ej2/ej2-buttons/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-popups/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-navigations/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-dropdowns/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-lists/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-inputs/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-calendars/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-splitbuttons/styles/material.css" rel="stylesheet">
+    
+    
+    
+    <style>
+      .e-form {
+        display: block;
+        padding-bottom: 10px;
+      }
+      .e-form input {
+        width: 15%;
+      }
+    </style>
+<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
+<script src="es5-datasource.js" type="text/javascript"></script>
+</head>
+
+<body>
+    
+    <div id="container">
+        <div class="e-form">
+            <input type="text" id="id" placeholder="id">
+            <input type="text" id="name" placeholder="name">
+            <input type="text" id="userName" placeholder="userName">
+            <input type="text" id="email" placeholder="email">
+            <input type="button" value="Insert" id="manipulate" onclick="onClick()">
+        </div>
+        <table id="datatable" class="e-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email Address</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+
+<script>
+var ele = document.getElementById('container');
+if(ele) {
+    ele.style.visibility = "visible";
+ }   
+        </script>
+<script src="index.js" type="text/javascript"></script>
+</body></html>

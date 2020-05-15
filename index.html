@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html id="html">
+<head>
+    <title>Page Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TypeScript UI Components">
+    <meta name="author" content="Syncfusion">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-base/styles/material-dark.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-buttons/styles/material-dark.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-inputs/styles/material-dark.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-popups/styles/material-dark.css" rel="stylesheet">
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
+
+        <!-- Essential JS 2 Menu's dependent material theme -->
+        <link href="https://cdn.syncfusion.com/ej2/ej2-base/styles/material-dark.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.syncfusion.com/ej2/ej2-lists/styles/material-dark.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.syncfusion.com/ej2/ej2-popups/styles/material-dark.css" rel="stylesheet" type="text/css" />
+    
+        <!-- Essential JS 2 Menu's material theme -->
+        <link href="https://cdn.syncfusion.com/ej2/ej2-navigations/styles/material-dark.css" rel="stylesheet" type="text/css" />
+    
+        <!-- Essential JS 2 Menu's dependent scripts -->
+        <script src="https://cdn.syncfusion.com/ej2/ej2-base/dist/global/ej2-base.min.js" type="text/javascript"></script>
+        <script src="https://cdn.syncfusion.com/ej2/ej2-data/dist/global/ej2-data.min.js" type="text/javascript"></script>
+        <script src="https://cdn.syncfusion.com/ej2/ej2-lists/dist/global/ej2-lists.min.js" type="text/javascript"></script>
+        <script src="https://cdn.syncfusion.com/ej2/ej2-popups/dist/global/ej2-popups.min.js" type="text/javascript"></script>
+    
+        <!-- Essential JS 2 Menu's global script -->
+        <script src="https://cdn.syncfusion.com/ej2/ej2-navigations/dist/global/ej2-navigations.min.js" type="text/javascript"></script>
+    
+            
+    <script src="https://cdn.sycompla.hu/js/common.js"></script>
+    <script src="https://cdn.sycompla.hu/js/command.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-debug.js"></script>
+
+    <script src="getFile.js" type="text/javascript"></script>
+    <script src="subscribeAccept.js" type="text/javascript"></script>
+    <script src="permission.js" type="text/javascript"></script>
+    <script src="getUserDetails.js" type="text/javascript"></script>
+    <script src="serialNumberForm.js" type="text/javascript"></script>
+    <script src="attachNewDeviceInfo.js" type="text/javascript"></script>
+    <script src="createMenu.js" type="text/javascript"></script>
+    </head>
+    <body onload="load();" id="editor-container">
+    
+    
+    </body>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
+    
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-database.js"></script>
+
+        
+    
+    <script>
+       
+    var guidFromResponse = "";
+    var signUpCode = 0;
+    var loginCode = 0;
+
+    /*
+    class Ac4yRestServiceClient {
+        constructor(host){this.host=host;}
+        getHost(){return this.host;};
+        jsonContent(){return new Headers({'Content-Type': 'application/json'});}
+        async get(path) {
+            const promise = await fetch(this.getHost()+path);
+            return await promise.json();
+        }
+        async post(path, request) {
+            const promise = await fetch(
+                this.getHost()+path
+                ,{
+                    method: 'POST'
+                    ,body: JSON.stringify(request)
+                    ,headers: this.jsonContent()
+                }
+            );
+            return await promise.json();
+        } // post
+    } // Ac4yRestServiceClient
+    */
+    class GigServerRestServiceClient extends Ac4yRestServiceClient {
+        async loginRequest(request) {return await this.post("/gigserver/loginRequest", request)}
+        async authenticationRequest(request) {return await this.post("/gigserver/authenticationrequest", request)}
+        async acceptAuthentication(request) {return await this.post("/gigserver/acceptAuthentication", request)}
+        async isTokenExist(request) {return await this.post("/gigserver/istokenexist", request)}
+        async signUpRequest(request) {return await this.post("/gigserver/signup", request)}
+        async checkSerialNumber(request) {return await this.post("/gigserver/checkserialnumber", request)}
+        async acceptRequest(request) {return await this.post("/gigserver/acceptrequest", request)}
+        async getUserFromByToken(request) {return await this.post("/gigserver/getuserfrombytoken", request)}
+        async updateUser(request) {return await this.post("/gigserver/updateuser", request)}
+    }; // GateRestServiceClient
+    
+    var GigRestServiceClient = new GigServerRestServiceClient( "https://service.sycompla.hu");
+    var localhostServerClient = new GigServerRestServiceClient( "http://localhost:44339");
+    
+    async function loginRequest(requestToken){
+        var response = await GigRestServiceClient.loginRequest({fbToken: requestToken});
+    
+        guidFromResponse = response.authenticationRequest.guid;
+        console.log(response);
+
+        if(response.result.code === 1){
+            var authenticationRequestResponse = await GigRestServiceClient.authenticationRequest(
+                {
+                    CheckData: response.authenticationRequest.checkData,
+                    fbToken: response.fbToken
+                });
+
+            if(authenticationRequestResponse.result.code === 1){
+                createMenu();
+                attachNewDeviceInfo("Sikeres bejelentkezés");
+            }
+        }
+    }
+    
+    async function attachNewDevice(requestSerialNumber, requestToken){
+        var response = await GigRestServiceClient.checkSerialNumber({SerialNumber: requestSerialNumber, fbToken: requestToken});
+    
+        guidFromResponse = response.userGuid;
+        console.log(response);
+
+        if(response.result.code === 1){
+            var acceptRequestResponse = await GigRestServiceClient.acceptRequest(
+                {
+                    UserGuid: response.userGuid,
+                    fbToken: requestToken
+                });
+            
+            if(acceptRequestResponse.result.code === 1)
+                attachNewDeviceInfo("Sikeresen csatoltad az eszközt!")
+            else
+                attachNewDeviceInfo(acceptRequestResponse.result.message);
+        }
+    }
+    
+    async function getUserFromByToken(requestToken){
+        var response = await GigRestServiceClient.getUserFromByToken({fbToken: requestToken});
+    
+        console.log(response);
+
+        if(response.result.code === 1){
+            getUserDetails(
+                response.user
+            )
+            .then((message) => {
+
+                var user = JSON.parse(message.user);
+                console.log(user);
+
+                var userObj = new User(
+                                user.name,
+                                user.userName,
+                                user.phoneNumber,
+                                user.email,
+                                user.password
+
+                            );
+
+                updateUser(message.guid, userObj);
+
+            });
+        }
+    }
+
+    async function acceptAuthentication(requestGuid, checkData){
+        var response = await GigRestServiceClient.acceptAuthentication({RequestGuid: requestGuid, CheckData: checkData});
+        console.log(response);
+    }
+    
+    async function updateUser(requestGuid, requestUser){
+        var response = await GigRestServiceClient.updateUser({UserGuid: requestGuid, User: requestUser});
+        console.log(response);
+
+        if(response.result.code === 1){
+            attachNewDeviceInfo("Felhasználói adatok frissültek.")
+        }
+    }
+
+    async function authenticationRequest(authenticationRequest, requestToken){
+        var response = await GigRestServiceClient.authenticationRequest({AuthenticationRequest: authenticationRequest, fbToken: requestToken});
+        console.log(response);
+    }
+    
+    async function signUp(requestToken, user){
+        var response = await GigRestServiceClient.signUpRequest(
+            {
+                fbToken: requestToken, 
+                User: user
+            });
+        console.log(response);
+
+
+    }
+
+    async function isTokenExist(requestToken){
+        var response = await GigRestServiceClient.isTokenExist({fbToken: requestToken});
+        console.log(response);
+    }
+    
+    
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCHxM0wUG13SqWO1-3sz6qH55klT9o63U4",
+        authDomain: "onlyhttp-efac3.firebaseapp.com",
+        databaseURL: "https://onlyhttp-efac3.firebaseio.com",
+        projectId: "onlyhttp-efac3",
+        storageBucket: "onlyhttp-efac3.appspot.com",
+        messagingSenderId: "217834076564",
+        appId: "1:217834076564:web:87be1f703dd42075ccf781",
+        measurementId: "G-E5Z8M1PNK2"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    
+      function writeData() {
+          firebase.database().ref("User").set({
+              name : document.getElementById("name").value,
+              age: document.getElementById("age").value
+          });
+      }
+    
+      const messaging = firebase.messaging();
+    
+        messaging.usePublicVapidKey('BBZyemd-Hluk0hCFA4xhI3rIcgnWtn_f6dikJ7GE_99SaH65znVAuvhYgge9rWlgUUNw3wTHZpONuInl46axtEU');
+    /*
+        function resetUI() {
+            // [START get_token]
+            // Get Instance ID token. Initially this makes a network call, once retrieved
+            // subsequent calls to getToken will return from cache.
+            messaging.getToken().then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken);
+                loginRequest(currentToken);
+            } else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+                // Show permission UI.
+            }
+            }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+    
+            });
+            // [END get_token
+        }   
+    */
+        function requestPermission() {
+            console.log('Requesting permission...');
+            // [START request_permission]
+            Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+                // TODO(developer): Retrieve an Instance ID token for use with FCM.
+                // [START_EXCLUDE]
+                // In many cases once an app has been granted notification permission,
+                // it should update its UI reflecting this.
+                //resetUI();
+                // [END_EXCLUDE]
+            } else {
+                console.log('Unable to get permission to notify.');
+            }
+            });
+            // [END request_permission]
+        }
+    
+    function mainLoginRequest() {
+            messaging.getToken().then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken);
+                loginRequest(currentToken);
+            } else {
+    
+                console.log('No Instance ID token available. Request permission to generate one.');
+                        }
+            }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+    
+            });
+            // [END get_token
+        }   
+    
+        messaging.onMessage((payload) => {
+            console.log('Message received. ', payload);
+    
+            console.log(guidFromResponse);
+                   acceptAuthentication(guidFromResponse, payload.data.body);
+            
+        });
+
+        async function load(){
+
+            getNotificationsPermissionStatement()
+                .then((response) => {
+                    if(response.result.code !== 1){
+                        subscribeAccept()
+                            .then((message) => {
+
+                                Notification.requestPermission().then((permission) => {
+                                    if (permission === 'granted') {
+                                        console.log('Notification permission granted.');
+                                
+                                        getUserDetails(null)
+                                            .then((message) => {
+
+                                                var user = JSON.parse(message.user);
+                                                console.log(user);
+
+                                                var userObj = new User(
+                                                                user.name,
+                                                                user.userName,
+                                                                user.phoneNumber,
+                                                                user.email,
+                                                                user.password
+
+                                                            );
+
+                                                messaging.getToken().then((currentToken) => {
+                                                    if (currentToken) {
+                                                        console.log(currentToken);
+
+                                                        signUp(
+                                                            currentToken,
+                                                            userObj
+                                                        );
+
+                                                    } else {
+                                            
+                                                        console.log('No Instance ID token available. Request permission to generate one.');
+                                                                }
+                                                    }).catch((err) => {
+                                                    console.log('An error occurred while retrieving token. ', err);
+                                            
+                                                    });
+
+
+                                            })
+                                            .catch((error) => {console.log(error);});
+                                    
+                                    } else {
+                                        console.log('Unable to get permission to notify.');
+                                    }
+                                });
+
+                            })                            
+                            .catch((error) => {console.log(error);});
+                    }
+                    else
+                        mainLoginRequest();
+                })
+                .catch((error) => {console.log(error);});
+        }
+
+        function addNewDeviceClick(){
+            getSerialNumber()
+                .then((message) => {
+
+                    
+                    var serialNumber = JSON.parse(message.serialNumber);
+
+                    messaging.getToken().then((currentToken) => {
+                        if (currentToken) {
+                            console.log(currentToken);
+
+                            attachNewDevice(parseInt(serialNumber.serialNumber), currentToken);
+
+                        } else {
+                
+                            console.log('No Instance ID token available. Request permission to generate one.');
+                                    }
+                        }).catch((err) => {
+                        console.log('An error occurred while retrieving token. ', err);
+                
+                        });
+
+                })
+        }
+    /*
+        mainLoginRequest();
+    */
+      
+    </script>
+    
+    </body>
+    </html>
+    
+    
