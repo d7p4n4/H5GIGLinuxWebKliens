@@ -20,11 +20,11 @@ class Ac4yRestServiceClient {
 } // Ac4yRestServiceClient
 
 class GigServerRestServiceClient extends Ac4yRestServiceClient {
-    async loginRequest(request) {return await this.post("/gigserver/loginRequest", request)}
-    async acceptAuthentication(request) {return await this.post("/gigserver/acceptAuthentication", request)}
+    async loginRequest(request) {return await this.post("/loginRequest", request)}
+    async acceptAuthentication(request) {return await this.post("/acceptAuthentication", request)}
 }; // GateRestServiceClient
 
-var GigRestServiceClient = new GigServerRestServiceClient( "https://service.sycompla.hu");
+var GigRestServiceClient = new GigServerRestServiceClient( "https://gigservice.sycompla.hu");
 
 async function acceptAuthentication(requestToken){
     var response = await GigRestServiceClient.acceptAuthentication({token: requestToken});
@@ -34,8 +34,8 @@ async function acceptAuthentication(requestToken){
 
 
 // Give the service worker access to Firebase Messaging.
-importScripts('https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.12.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.2.7/firebase-messaging.js');
 
 // Initialize the Firebase app in the service worker by passing in the messagingSenderId.
 var config = {

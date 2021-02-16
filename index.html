@@ -32,8 +32,8 @@
         <script src="https://cdn.syncfusion.com/ej2/ej2-navigations/dist/global/ej2-navigations.min.js" type="text/javascript"></script>
     
             
-    <script src="https://cdn.sycompla.hu/js/common.js"></script>
-    <script src="https://cdn.sycompla.hu/js/command.js"></script>
+    <script src="https://cdn.sycompla.com/js2/common.js"></script>
+    <script src="https://cdn.sycompla.com/js2/command.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
@@ -52,12 +52,12 @@
     
     </body>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
     
     <!-- TODO: Add SDKs for Firebase products that you want to use
          https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 
         
     
@@ -90,18 +90,19 @@
     } // Ac4yRestServiceClient
     */
     class GigServerRestServiceClient extends Ac4yRestServiceClient {
-        async loginRequest(request) {return await this.post("/gigserver/loginRequest", request)}
-        async authenticationRequest(request) {return await this.post("/gigserver/authenticationrequest", request)}
-        async acceptAuthentication(request) {return await this.post("/gigserver/acceptAuthentication", request)}
-        async isTokenExist(request) {return await this.post("/gigserver/istokenexist", request)}
-        async signUpRequest(request) {return await this.post("/gigserver/signup", request)}
-        async checkSerialNumber(request) {return await this.post("/gigserver/checkserialnumber", request)}
-        async acceptRequest(request) {return await this.post("/gigserver/acceptrequest", request)}
-        async getUserFromByToken(request) {return await this.post("/gigserver/getuserfrombytoken", request)}
-        async updateUser(request) {return await this.post("/gigserver/updateuser", request)}
+        async loginRequest(request) {return await this.post("/loginRequest", request)}
+        async authenticationRequest(request) {return await this.post("/authenticationrequest", request)}
+        async acceptAuthentication(request) {return await this.post("/acceptAuthentication", request)}
+        async isTokenExist(request) {return await this.post("/istokenexist", request)}
+        async signUpRequest(request) {return await this.post("/signup", request)}
+        async checkSerialNumber(request) {return await this.post("/checkserialnumber", request)}
+        async acceptRequest(request) {return await this.post("/acceptrequest", request)}
+        async getUserFromByToken(request) {return await this.post("/getuserfrombytoken", request)}
+        async updateUser(request) {return await this.post("/updateuser", request)}
     }; // GateRestServiceClient
     
-    var GigRestServiceClient = new GigServerRestServiceClient( "https://service.sycompla.hu");
+    var GigRestServiceClient = new GigServerRestServiceClient( "https://gigservice.sycompla.com");
+    //var GigRestServiceClient = new GigServerRestServiceClient( "https://localhost:44339/gigserver");
     var localhostServerClient = new GigServerRestServiceClient( "http://localhost:44339");
     
     async function loginRequest(requestToken){
